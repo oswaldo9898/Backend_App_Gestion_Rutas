@@ -8,6 +8,7 @@ const app = express();
 
 //RUTAS
 var usuarios_route = require('./routes/usuariosRoute');
+var autobuses_route = require('./routes/autobusesRoute');
 
 //SETINGS
 app.set('port', port);
@@ -31,5 +32,6 @@ app.use(bodyparser.json({limit: '50mb', extends: true}))
 
 //ROUTES
 app.use('/api', usuarios_route);
+app.use('/api', autobuses_route);
 
 module.exports = app;
