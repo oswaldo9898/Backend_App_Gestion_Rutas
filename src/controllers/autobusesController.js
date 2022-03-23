@@ -51,9 +51,17 @@ const obtener_foto_autobus = async function(req, res){
     });
 }
 
+const eliminar_autobus = async function(req, res) {
+    var placa = req.params['placa'];
+    let sql = `Delete from autobuses where placa= ${connection.escape(placa)};`;
+    const reg = await query(sql);
+    res.status(200).send({data:reg});
+}
+
 
 module.exports = {
     listar_autobuses,
     registro_autobus,
-    obtener_foto_autobus
+    obtener_foto_autobus,
+    eliminar_autobus
 }
