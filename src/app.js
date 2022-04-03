@@ -9,14 +9,16 @@ const app = express();
 //RUTAS
 var usuarios_route = require('./routes/usuariosRoute');
 var autobuses_route = require('./routes/autobusesRoute');
+var estudiantes_route = require('./routes/estudiantesRoute');
+var conductores_route = require('./routes/conductoresRoute');
 
 //SETINGS
 app.set('port', port);
 
 
 //MIDDLEWARS
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.json({limit: '50mb'}));
 
 //Permiso para conectar el backend y frontend
 app.use((req,res,next)=>{
@@ -27,11 +29,13 @@ app.use((req,res,next)=>{
     next();
 });
 
-app.use(bodyparser.urlencoded({extended: true}));
-app.use(bodyparser.json({limit: '50mb', extends: true}))
+app.use(bodyparser.urlencoded({limit: '50mb',extended: true}));
+app.use(bodyparser.json({limit: '50mb'}))
 
 //ROUTES
 app.use('/api', usuarios_route);
 app.use('/api', autobuses_route);
+app.use('/api', estudiantes_route);
+app.use('/api', conductores_route);
 
 module.exports = app;

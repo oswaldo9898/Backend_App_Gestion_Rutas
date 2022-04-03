@@ -20,11 +20,11 @@ const login = async function(req, res) {
                         message: 'Inicio de sesión correcto'
                     });
                 }else{
-                    res.status(200).send({reg:[],message:"El correo electrónico o contraseña son incorrectos"});
+                    res.status(401).send({reg:[],message:"El correo electrónico o contraseña son incorrectos"});
                 }
             });
         }else{
-            res.status(200).send({reg,message:"El correo electrónico o contraseña son incorrectos"});
+            res.status(401).send({reg,message:"El correo electrónico o contraseña son incorrectos"});
         }
     }catch(error){
         console.log("error -> ", error)
@@ -44,12 +44,17 @@ const registro = async function(req, res) {
                 let sql3 = `Insert into usuarios(cedula,nombres,apellidos,email,password,rol,email_validado) 
                 values(${connection.escape(data.cedula)},${connection.escape(data.nombres)},${connection.escape(data.apellidos)},${connection.escape(data.email)},${connection.escape(passwordHash)},${connection.escape(data.rol)},'FALSE');`;
                 const reg3 = await query(sql3);
-                res.status(200).send({reg3,message:"Exito"});
+                let sql4 = `Select * from usuarios where email= ${connection.escape(data.email)};`;
+                const reg4 = await query(sql4);
+                res.status(200).send({
+                    data: reg4[0],
+                    message:"Exito"
+                });
             }else{
-            res.status(200).send({reg2,message:"El correo electrónico ya está registrado"});
+            res.status(401).send({reg2,message:"El correo electrónico ya está registrado"});
             }            
         }else{
-            res.status(200).send({reg1,message:"El número de cédula ya está registrado"});
+            res.status(401).send({reg1,message:"El número de cédula ya está registrado"});
         }
     }catch(error){
         console.log("error -> ", error)
