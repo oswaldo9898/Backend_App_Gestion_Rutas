@@ -101,7 +101,6 @@ const eliminar_estudiante = async function(req, res) {
     }
 }
 
-
 const obtener_foto_estudiante = async function(req, res){
     var img = req.params['img'];
     fs.stat('./src/uploads/estudiantes/'+img, function(err){
@@ -115,11 +114,22 @@ const obtener_foto_estudiante = async function(req, res){
     });
 }
 
+const cantidad_estudiantes = async function(req, res) {
+    try{
+        let sql = `Select count(*) as cantidad from estudiantes;`;
+        const reg = await query(sql);
+        res.status(200).send({data:reg[0].cantidad});
+    }catch(error){
+        console.log("error -> ", error)
+    }
+}
+
 module.exports = {
     registro_estudiante,
     lista_estudiantes,
     registro_estudiante_direccion,
     editar_estudiante,
     obtener_foto_estudiante,
-    eliminar_estudiante
+    eliminar_estudiante,
+    cantidad_estudiantes
 }

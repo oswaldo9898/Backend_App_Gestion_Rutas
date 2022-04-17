@@ -8,6 +8,7 @@ api.get('/lista_estudiantes', estudiantesController.lista_estudiantes);
 api.post('/registro_estudiante_direccion', estudiantesController.registro_estudiante_direccion);
 api.delete('/eliminar_estudiante/:cedula', estudiantesController.eliminar_estudiante);
 api.put('/editar_estudiante', estudiantesController.editar_estudiante);
+api.get('/cantidad_estudiantes', estudiantesController.cantidad_estudiantes);
 
 
 

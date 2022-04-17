@@ -61,7 +61,79 @@ const registro = async function(req, res) {
     }
 }
 
+
+const obtener_representante_libre = async function(req, res) {
+    try{
+        let sql = `
+        select usuarios.* from usuarios 
+                where not exists(select null from representante_estudiante where 
+                usuarios.cedula = representante_estudiante.cedula) and usuarios.rol = 'REPRESENTANTE';`;
+        const reg = await query(sql);
+        res.status(200).send(reg);
+    }catch(error){
+        console.log("error -> ", error)
+    }
+}
+
+const obtener_representante_asignado = async function(req, res) {
+    try{
+        var cedulaEst = req.params['cedulaEst'];
+        let sql = `Select usuarios.* 
+        from usuarios
+        RIGHT JOIN representante_estudiante on usuarios.cedula = representante_estudiante.cedula
+        where representante_estudiante.cedula_est = ${connection.escape(cedulaEst)};`;
+        const reg = await query(sql);
+        res.status(200).send(reg);
+    }catch(error){
+        console.log("error -> ", error)
+    }
+}
+
+const registro_representante = async function(req, res) {
+    try{
+        var cedulaEst = req.params['cedulaEst'];
+        var cedula = req.params['cedula'];
+        let sql = `Select * from representante_estudiante where cedula_est= ${connection.escape(cedulaEst)}`;
+        const reg = await query(sql);
+        if(reg==""){
+            let sql2 = `Insert into representante_estudiante(cedula_est, cedula) 
+                values(${connection.escape(cedulaEst)},${connection.escape(cedula)});`;
+            const reg2 = await query(sql2);
+            let sql4 = `Select * from representante_estudiante where cedula_est= ${connection.escape(cedulaEst)} and cedula = ${connection.escape(cedula)};`;
+            const reg4 = await query(sql4);
+            res.status(200).send({data:reg4[0],message:"Exito"});
+        }else{
+            let sql3 = `Update representante_estudiante set cedula = ${connection.escape(cedula)} where cedula_est=${connection.escape(cedulaEst)};`;
+            const reg4 = await query(sql3);
+            res.status(200).send({data:reg[0],message:"Exito"});
+        }
+    }catch(error){
+        console.log("error -> ", error)
+    }
+}
+
+const eliminar_representante_asignado = async function(req, res) {
+    try{
+        var cedulaEst = req.params['cedulaEst'];
+        let sql = `Select * from representante_estudiante where cedula_est= ${connection.escape(cedulaEst)}`;
+        const reg = await query(sql);
+        if(reg!=""){
+            let sql2 = `Delete from representante_estudiante where cedula_est = ${connection.escape(cedulaEst)};`;
+            const reg2 = await query(sql2);
+            res.status(200).send({data:reg2[0],message:"El registro ha sido eliminado"});
+        }else{
+            res.status(401).send({data:reg1[0],message:"Error"});
+        }
+    }catch(error){
+        console.log("error -> ", error)
+    }
+}
+
 module.exports = {
     login,
-    registro
+    registro,
+    obtener_representante_libre,
+    obtener_representante_asignado,
+    registro_representante,
+    eliminar_representante_asignado
 }

@@ -49,7 +49,7 @@ const editar_autobus = async function(req, res) {
         var data = req.body;
         let sql = `Select * from autobuses where idautobus = ${connection.escape(data.idautobus)};`;
         const reg= await query(sql);
-        if(reg1!=""){
+        if(reg!=""){
             let sql1;
             if(data.path != null){
                 var name = data.path.split('/');
@@ -61,12 +61,12 @@ const editar_autobus = async function(req, res) {
             }else{
                 sql1 = `Update autobuses set marca = ${connection.escape(data.marca)}, modelo = ${connection.escape(data.modelo)}, placa = ${connection.escape(data.placa)} where idautobus = ${connection.escape(data.idautobus)};`;
             }
-            const reg2 = await query(sql1);
-            let sql4 = `Select * from autobuses where idautobus = ${connection.escape(data.idautobus)};`;
-            const reg4 = await query(sql4);
-            res.status(200).send({data:reg4[0],message:"Exito"});
+            const reg1 = await query(sql1);
+            let sql2= `Select * from autobuses where idautobus = ${connection.escape(data.idautobus)};`;
+            const reg2 = await query(sql2);
+            res.status(200).send({data:reg2[0],message:"Exito"});
         }else{
-            res.status(401).send({data:reg1[0],message:"No existe"});
+            res.status(401).send({data:reg[0],message:"No existe"});
         }
     }catch(error){
         res.status(401).send({message:error});

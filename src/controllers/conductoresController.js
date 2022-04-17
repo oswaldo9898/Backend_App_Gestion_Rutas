@@ -40,7 +40,7 @@ const registro_conductor = async function(req, res) {
                     message:"Exito"
                 });
             }else{
-            res.status(401).send({reg2,message:"El correo electrónico ya está registrado"});
+                res.status(401).send({reg2,message:"El correo electrónico ya está registrado"});
             }            
         }else{
             res.status(401).send({reg1,message:"El número de cédula ya está registrado"});
@@ -69,11 +69,12 @@ const editar_conductor = async function(req, res) {
         var data = req.body;
         let sql = `Select * from usuarios where email = ${connection.escape(data.email)}`;
         const reg = await query(sql);
-        if(reg==""){
+        if(reg[0].cedula==data.cedula){
             let sql1;
             let sql2 = `Update usuarios set nombres = ${connection.escape(data.nombres)}, apellidos = ${connection.escape(data.apellidos)}, email = ${connection.escape(data.email)} where cedula = ${connection.escape(data.cedula)};`
             const reg2 = await query(sql2);
-
+            let sql3 = `Select * from conductores where cedula_con = ${connection.escape(data.cedula)}`;
+            const reg3 = await query(sql3);
             if(data.path != null){
                 var name = data.path.split('/');
                 var foto_name = name[6];
@@ -81,6 +82,7 @@ const editar_conductor = async function(req, res) {
                 fs.writeFileSync('src/uploads/conductores/'+data.path, new Buffer.from(data.imagen64, "base64"), function(err) {});
                 sql1 = `Update conductores set foto_con = ${connection.escape(data.path)} where cedula_con = ${connection.escape(data.cedula)};`;
                 const reg1 = await query(sql1);
+                eliminar_foto_backend(reg3[0].foto_con);
             }
             let sql4 = `Select * from usuarios where cedula= ${connection.escape(data.cedula)};`;
             const reg4 = await query(sql4);
@@ -89,7 +91,6 @@ const editar_conductor = async function(req, res) {
         }else{
             res.status(401).send({data:reg[0],message:"El correo electrónico ya está registrado"});
         }
-        
     }catch(error){
         res.status(401).send({message:error});
         console.log("error -> ", error)
@@ -99,11 +100,12 @@ const editar_conductor = async function(req, res) {
 const eliminar_conductor = async function(req, res) {
     try{
         var cedula = req.params['cedula'];
-        let sql1 = `Select * from usuarios where cedula= ${connection.escape(cedula)};`;
+        let sql1 = `Select * from conductores where cedula_con= ${connection.escape(cedula)};`;
         const reg1 = await query(sql1);
         if(reg1!=""){
             let sql2 = `Delete from usuarios where cedula = ${connection.escape(cedula)};`;
             const reg2 = await query(sql2);
+            eliminar_foto_backend(reg1[0].foto_con);
             res.status(200).send({data:reg2[0],message:"El registro ha sido eliminado"});
         }else{
             res.status(401).send({data:reg1[0],message:"Error"});
@@ -125,6 +127,12 @@ const obtener_foto_conductor = async function(req, res){
             res.status(200).sendFile(path.resolve(path_img));
         }
     });
+}
+
+function eliminar_foto_backend(foto){
+    if(fs.existsSync('src/uploads/conductores/'+foto)){
+        fs.unlinkSync('src/uploads/conductores/'+foto)
+    } 
 }
 
 module.exports = {

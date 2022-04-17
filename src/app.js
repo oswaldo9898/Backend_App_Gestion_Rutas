@@ -11,6 +11,7 @@ var usuarios_route = require('./routes/usuariosRoute');
 var autobuses_route = require('./routes/autobusesRoute');
 var estudiantes_route = require('./routes/estudiantesRoute');
 var conductores_route = require('./routes/conductoresRoute');
+var rutas_route = require('./routes/rutasRoute');
 
 //SETINGS
 app.set('port', port);
@@ -37,5 +38,6 @@ app.use('/api', usuarios_route);
 app.use('/api', autobuses_route);
 app.use('/api', estudiantes_route);
 app.use('/api', conductores_route);
+app.use('/api', rutas_route);
 
 module.exports = app;
