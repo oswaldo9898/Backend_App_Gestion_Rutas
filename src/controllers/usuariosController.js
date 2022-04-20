@@ -129,11 +129,50 @@ const eliminar_representante_asignado = async function(req, res) {
     }
 }
 
+const registrar_id_activo = async function(req, res) {
+    try{
+        var cedula = req.params['cedula'];
+        var id = req.body.id;
+        let sql = `Select * from usuarios where cedula= ${connection.escape(cedula)}`;
+        const reg = await query(sql);
+        if(reg!=""){
+            let sql3 = `Update usuarios set activo = ${connection.escape(id)} where cedula=${connection.escape(cedula)};`;
+            const reg4 = await query(sql3);
+            res.status(200).send({data:reg[0],message:"Exito"});
+        }else{
+            res.status(401).send({data:reg1[0],message:"Error"});
+        }
+    }catch(error){
+        console.log("error -> ", error)
+    }
+
+}
+
+const eliminar_id_activo = async function(req, res) {
+    try{
+        var cedula = req.params['cedula'];
+        let sql = `Select * from usuarios where cedula= ${connection.escape(cedula)}`;
+        const reg = await query(sql);
+        if(reg!=""){
+            let sql3 = `Update usuarios set activo = '' where cedula=${connection.escape(cedula)};`;
+            const reg4 = await query(sql3);
+            res.status(200).send({data:reg[0],message:"Exito"});
+        }else{
+            res.status(401).send({data:reg1[0],message:"Error"});
+        }
+    }catch(error){
+        console.log("error -> ", error)
+    }
+
+}
+
 module.exports = {
     login,
     registro,
     obtener_representante_libre,
     obtener_representante_asignado,
     registro_representante,
-    eliminar_representante_asignado
+    eliminar_representante_asignado,
+    registrar_id_activo,
+    eliminar_id_activo
 }

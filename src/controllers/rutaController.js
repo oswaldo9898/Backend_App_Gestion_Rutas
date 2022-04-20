@@ -79,9 +79,10 @@ const obtener_estudiantes_sin_ruta = async function(req, res) {
 const obtener_estudiantes_ruta = async function(req, res) {
     try{
         var idrutas = req.params['idrutas'];
-        let sql = `Select estudiantes.* 
+        let sql = `Select estudiantes.*, representante_estudiante.cedula
         from estudiantes
         RIGHT JOIN ruta_estudiante on estudiantes.cedula_est = ruta_estudiante.cedula_est
+        RIGHT JOIN representante_estudiante on estudiantes.cedula_est = representante_estudiante.cedula_est
         where ruta_estudiante.idrutas = ${connection.escape(idrutas)}`;
         const reg = await query(sql);
         res.status(200).send(reg);
@@ -89,6 +90,7 @@ const obtener_estudiantes_ruta = async function(req, res) {
         console.log("error -> ", error)
     }
 }
+
 
 const eliminar_estudiantes_ruta = async function(req, res) {
     try{

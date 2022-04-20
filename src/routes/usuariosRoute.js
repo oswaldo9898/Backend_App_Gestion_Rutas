@@ -9,5 +9,7 @@ api.get('/obtener_representante_libre', usuariosController.obtener_representante
 api.get('/obtener_representante_asignado/:cedulaEst', usuariosController.obtener_representante_asignado);
 api.post('/registro_representante/:cedulaEst/:cedula', usuariosController.registro_representante);
 api.delete('/eliminar_representante_asignado/:cedulaEst', usuariosController.eliminar_representante_asignado);
+api.post('/registrar_id_activo/:cedula', usuariosController.registrar_id_activo);
+api.post('/eliminar_id_activo/:cedula', usuariosController.eliminar_id_activo);
 
 module.exports = api;
