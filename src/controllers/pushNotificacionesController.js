@@ -12,7 +12,7 @@ async function enviar_notificacion_todos(req, res, next){
         contents: {"en": mensaje},
         included_segments:["All"],
         content_available: true,
-        small_icon: "ic_notification_icon",
+        small_icon: "airport_shuttle_outlined",
         data: {
             pushTitle: "CUSTOM NOTIFICATION"
         }
@@ -41,6 +41,7 @@ async function enviar_notificacion_dispotivo (req, res, next) {
                 app_id: ONE_SIGNAL_CONFIG.APP_ID,
                 contents: {"es": mensaje},
                 included_segments:["included_player_ids"],
+                heading: "Notificación",
                 include_player_ids: [reg1[0].activo],
                 content_available: true,
                 small_icon: "airport_shuttle_outlined",
@@ -48,7 +49,6 @@ async function enviar_notificacion_dispotivo (req, res, next) {
                     pushTitle: "CUSTOM NOTIFICATION"
                 }
             };
-        
             pushNotificacionesService.SendNotification(message, (error, results)=> {
                 if(error) {
                     return next(error);
@@ -111,6 +111,7 @@ async function enviar_notificacion_rutas (req, res, next) {
                 var message = {
                     app_id: ONE_SIGNAL_CONFIG.APP_ID,
                     contents: {"es": mensaje},
+                    heading: "Notificación",
                     included_segments:["included_player_ids"],
                     include_player_ids: [element.activo],
                     content_available: true,
@@ -119,7 +120,6 @@ async function enviar_notificacion_rutas (req, res, next) {
                         pushTitle: "CUSTOM NOTIFICATION"
                     }
                 };
-            
                 pushNotificacionesService.SendNotification(message, (error, results)=> {
                     if(error) {
                         return next(error);

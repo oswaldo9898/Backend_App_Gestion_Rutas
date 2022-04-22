@@ -64,10 +64,15 @@ const registro = async function(req, res) {
 
 const obtener_representante_libre = async function(req, res) {
     try{
-        let sql = `
-        select usuarios.* from usuarios 
-                where not exists(select null from representante_estudiante where 
-                usuarios.cedula = representante_estudiante.cedula) and usuarios.rol = 'REPRESENTANTE';`;
+        let sql =``;
+        var cedula = req.params['cedula'];
+        if(cedula == "vacio"){
+            sql = `select usuarios.* from usuarios 
+                where usuarios.rol = 'REPRESENTANTE';`;
+        }else{
+            sql = `select usuarios.* from usuarios 
+            where not (usuarios.cedula = ${connection.escape(cedula)}) and usuarios.rol = 'REPRESENTANTE';`;
+        }
         const reg = await query(sql);
         res.status(200).send(reg);
     }catch(error){

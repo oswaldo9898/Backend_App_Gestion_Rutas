@@ -124,6 +124,34 @@ const cantidad_estudiantes = async function(req, res) {
     }
 }
 
+const lista_estudiantes_representante = async function(req, res) {
+    try{
+        var cedula = req.params['cedula'];
+        let sql = `Select estudiantes.* from estudiantes
+        RIGHT JOIN representante_estudiante on estudiantes.cedula_est = representante_estudiante.cedula_est
+        RIGHT JOIN usuarios on usuarios.cedula = representante_estudiante.cedula
+        where usuarios.cedula = ${connection.escape(cedula)}`;
+        const reg = await query(sql);
+        res.status(200).send(reg);
+    }catch(error){
+        res.status(401).send({message:error});
+        console.log("error -> ", error)
+    }  
+}
+
+const obtener_idruta_estudiante = async function(req, res) {
+    try{
+        var cedula_est = req.params['cedula_est'];
+        let sql = `Select ruta_estudiante.idrutas
+        from ruta_estudiante where  ruta_estudiante.cedula_est = ${connection.escape(cedula_est)};`;
+        const reg = await query(sql);
+        res.status(200).send({data:reg[0].idrutas});
+    }catch(error){
+        res.status(401).send({message:error});
+        console.log("error -> ", error)
+    }
+}
+
 module.exports = {
     registro_estudiante,
     lista_estudiantes,
@@ -131,5 +159,7 @@ module.exports = {
     editar_estudiante,
     obtener_foto_estudiante,
     eliminar_estudiante,
-    cantidad_estudiantes
+    cantidad_estudiantes,
+    lista_estudiantes_representante,
+    obtener_idruta_estudiante
 }
