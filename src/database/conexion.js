@@ -1,6 +1,6 @@
 "use strict";
 const mysql = require("mysql"),
-    data = require("./datosConexion.json"),
+    data = require("./datosConexion2.json"),
     objectConnection = {
         host: data.mysql.host,
         port: data.mysql.port,
