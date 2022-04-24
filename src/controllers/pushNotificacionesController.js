@@ -62,37 +62,6 @@ async function enviar_notificacion_dispotivo (req, res, next) {
             res.status(200).send({data:reg1[0],message:"Exito"});
         }
     }
-    // var mensaje = req.params['mensaje'];
-    // var cedula = req.body.cedula;
-    // let sql1 = `Select * from usuarios where cedula= ${connection.escape(cedula)};`;
-    // const reg1 = await query(sql1);
-    // if(reg1!=""){
-    //     if (reg1[0].activo != null){
-    //         console.log(reg1[0].activo);
-    //     }
-
-    // }
-    // var message = {
-    //     app_id: ONE_SIGNAL_CONFIG.APP_ID,
-    //     contents: {"es": mensaje},
-    //     included_segments:["included_player_ids"],
-    //     include_player_ids: req.body.devices,
-    //     content_available: true,
-    //     small_icon: "ic_notification_icon",
-    //     data: {
-    //         pushTitle: "CUSTOM NOTIFICATION"
-    //     }
-    // };
-
-    // pushNotificacionesService.SendNotification(message, (error, results)=> {
-    //     if(error) {
-    //         return next(error);
-    //     }
-    //     return res.status(200).send({
-    //         message: "Success",
-    //         data: results,
-    //     });
-    // });
 };
 
 async function enviar_notificacion_rutas (req, res, next) {

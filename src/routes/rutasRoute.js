@@ -13,6 +13,4 @@ api.delete('/eliminar_estudiantes_ruta/:cedula_est', rutasController.eliminar_es
 api.post('/registro_estudiante_ruta/:cedula_est/:idrutas', rutasController.registro_estudiante_ruta);
 api.get('/cantidad_rutas', rutasController.cantidad_rutas);
 
-
-
 module.exports = api;

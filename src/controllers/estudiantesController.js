@@ -142,10 +142,11 @@ const lista_estudiantes_representante = async function(req, res) {
 const obtener_idruta_estudiante = async function(req, res) {
     try{
         var cedula_est = req.params['cedula_est'];
-        let sql = `Select ruta_estudiante.idrutas
-        from ruta_estudiante where  ruta_estudiante.cedula_est = ${connection.escape(cedula_est)};`;
+        let sql = `Select rutas.* from rutas
+        inner join ruta_estudiante on rutas.idrutas = ruta_estudiante.idrutas
+        where  ruta_estudiante.cedula_est = ${connection.escape(cedula_est)};`;
         const reg = await query(sql);
-        res.status(200).send({data:reg[0].idrutas});
+        res.status(200).send({data:reg[0],message:"Exito"});
     }catch(error){
         res.status(401).send({message:error});
         console.log("error -> ", error)
