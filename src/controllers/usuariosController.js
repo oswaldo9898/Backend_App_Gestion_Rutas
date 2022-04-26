@@ -171,6 +171,72 @@ const eliminar_id_activo = async function(req, res) {
 
 }
 
+const obtener_usuario = async function(req, res) {
+    try{
+        var cedula = req.params['cedula'];
+        let sql = `Select * 
+        from usuarios where cedula = ${connection.escape(cedula)};`;
+        const reg = await query(sql);
+        res.status(200).send({data:reg[0],message:"Exito"});
+    }catch(error){
+        console.log("error -> ", error)
+    }
+}
+
+const cambiar_password = async function(req, res) {
+    try{
+        var data = req.body;
+        let sql = `Select usuarios.cedula, usuarios.nombres, usuarios.apellidos, usuarios.email, usuarios.rol, usuarios.password from usuarios where cedula= ${connection.escape(data.cedula)};`;
+        const reg = await query(sql);
+        if(reg != ""){
+            const verificarPassword = await bcrypt.compare(data.passwordAnterior,reg[0].password,async function(err, check){
+                if(check){
+                    const passwordHash = await encrypt(data.passwordNueva);
+                    let sql2 = `Update usuarios set password = ${connection.escape(passwordHash)} where cedula = ${connection.escape(data.cedula)};`
+                    const reg2 = await query(sql2);
+                    res.status(200).send({
+                        data:reg[0],
+                        token:'.................',
+                        message: 'Exito'
+                    });
+                }else{
+                    res.status(401).send({
+                        data:reg[0],
+                        token:'.................',
+                        message: 'La contraseña es incorrecta'
+                    });
+                }
+            });
+        }else{
+            res.status(401).send({
+                data:reg[0],
+                token:'.................',
+                message: 'No existe el usuario'
+            });
+        }
+    }catch(error){
+        console.log("error -> ", error)
+    }
+}
+
+
+const eliminar_usuario_representante = async function(req, res) {
+    try{
+        var cedula = req.params['cedula'];
+        let sql = `Select * from usuarios where cedula= ${connection.escape(cedula)}`;
+        const reg = await query(sql);
+        if(reg!=""){
+            let sql2 = `Delete from usuarios where cedula = ${connection.escape(cedula)};`;
+            const reg2 = await query(sql2);
+            res.status(200).send({data:reg2[0],message:"El registro ha sido eliminado"});
+        }else{
+            res.status(401).send({data:reg1[0],message:"Error"});
+        }
+    }catch(error){
+        console.log("error -> ", error)
+    }
+}
+
 module.exports = {
     login,
     registro,
@@ -179,5 +245,8 @@ module.exports = {
     registro_representante,
     eliminar_representante_asignado,
     registrar_id_activo,
-    eliminar_id_activo
+    eliminar_id_activo,
+    obtener_usuario,
+    cambiar_password,
+    eliminar_usuario_representante
 }

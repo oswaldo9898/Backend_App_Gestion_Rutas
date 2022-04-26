@@ -11,5 +11,9 @@ api.post('/registro_representante/:cedulaEst/:cedula', usuariosController.regist
 api.delete('/eliminar_representante_asignado/:cedulaEst', usuariosController.eliminar_representante_asignado);
 api.post('/registrar_id_activo/:cedula', usuariosController.registrar_id_activo);
 api.post('/eliminar_id_activo/:cedula', usuariosController.eliminar_id_activo);
+api.get('/obtener_usuario/:cedula', usuariosController.obtener_usuario);
+api.post('/cambiar_password', usuariosController.cambiar_password);
+api.delete('/eliminar_usuario_representante/:cedula', usuariosController.eliminar_usuario_representante);
+
 
 module.exports = api;
