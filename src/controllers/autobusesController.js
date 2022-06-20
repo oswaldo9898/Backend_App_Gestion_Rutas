@@ -44,6 +44,18 @@ const lista_autobuses = async function(req, res) {
     }    
 }
 
+const lista_autobuses_disponibles = async function(req, res) {
+    try{
+        let sql = `SELECT autobuses.* FROM autobuses 
+        where not exists (select null from rutas where  autobuses.placa =  rutas.placa);`;
+        const reg = await query(sql);
+        res.status(200).send(reg);
+    }catch(error){
+        res.status(401).send({message:error});
+        console.log("error -> ", error)
+    }    
+}
+
 const editar_autobus = async function(req, res) {
     try{
         var data = req.body;
@@ -114,6 +126,7 @@ function eliminar_foto_backend(foto){
 module.exports = {
     registro_autobus,
     lista_autobuses,
+    lista_autobuses_disponibles,
     editar_autobus,
     obtener_foto_autobus,
     eliminar_autobus

@@ -63,6 +63,21 @@ const lista_conductores = async function(req, res) {
     }    
 }
 
+const lista_conductores_disponibles = async function(req, res) {
+    try{
+        let sql = `select usuarios.cedula, usuarios.nombres, usuarios.apellidos, usuarios.email, usuarios.rol, 
+                    conductores.foto_con 
+                    from usuarios
+                    inner join conductores where usuarios.cedula = conductores.cedula_con
+                    and not exists (select null from rutas where usuarios.cedula = rutas.cedula)`
+        const reg = await query(sql);
+        res.status(200).send(reg);
+    }catch(error){
+        res.status(401).send({message:error});
+        console.log("error -> ", error)
+    }    
+}
+
 
 const editar_conductor = async function(req, res) {
     try{
@@ -157,6 +172,7 @@ function eliminar_foto_backend(foto){
 module.exports = {
     registro_conductor,
     lista_conductores,
+    lista_conductores_disponibles,
     editar_conductor,
     obtener_foto_conductor,
     eliminar_conductor
